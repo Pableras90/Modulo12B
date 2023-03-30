@@ -1,15 +1,30 @@
-import { getPropertyDetail } from './properties-detail.api';
+import { getPropertyDetail } from './property-detail.api';
 import { setPropertyValues } from './property-detail.helpers';
 import { history } from '../../core/router/history';
+import { mapPropertyDetailsFromApiToVm } from './property_detail.mappers';
+
+let propertiesToVmId={
+    id:'',
+    title:'',
+    notes:'',
+    price:'',
+    city:'',
+    squareMeter:'',
+    rooms:'',
+    bathrooms:'',
+    locationUrl:'',
+    mainFeatures:'',
+    equipments:'',
+    mainImage:'',
+    images:'',
+  };
 
 
-const params =history.getParams();
-const isEditMode =Boolean(params.id);
 
-if (isEditMode){
-    getPropertyDetail(params.id).then()
-}
+
+const params = history.getParams();
 
 getPropertyDetail(params.id).then((propertiesId) => {
-  setPropertyValues(propertiesId);
+  propertiesToVmId = mapPropertyDetailsFromApiToVm(propertiesId);
+  setPropertyValues(propertiesToVmId);
 });
