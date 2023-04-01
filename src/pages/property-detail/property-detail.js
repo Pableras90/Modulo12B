@@ -19,7 +19,12 @@ let propertiesToVmId={
     images:'',
   };
 
-
+  let equipments = [];
+  getEquipments().then(data=>{
+    console.log(data);
+    equipments=data.map(id=>id.name);
+    console.log(equipments)
+  })
 
 
 const params = history.getParams();
