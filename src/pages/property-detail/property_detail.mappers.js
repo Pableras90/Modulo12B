@@ -3,11 +3,12 @@
     ? propertylist.map((property) => mapPropertyDetailsFromApiToVm(property))
     : [];*/
 
+const getIdEquipments = (equipmentIds, equipmentList) => {
+  return equipmentIds.map((equipmentId) =>equipmentList.find((equipment) => equipment.id === equipmentId)?.name
+  );
+};
 
-
-
-
-export const mapPropertyDetailsFromApiToVm = (property, equipments) => {
+export const mapPropertyDetailsFromApiToVm = (property, equipmentsList) => {
   return {
     id: property.id,
     title: property.title,
@@ -19,7 +20,7 @@ export const mapPropertyDetailsFromApiToVm = (property, equipments) => {
     bathrooms: `${property.bathrooms} ${getBathRoomWord(property.rooms)} `,
     location: property.locationUrl,
     mainFeatures: property.mainFeatures,
-    equipments: property.equipmentIds,
+    equipments: getIdEquipments(property.equipmentIds, equipmentsList),
     mainImage: property.images[0],
     image: Array.isArray(property.images) ? property.images[0] : '',
   };
@@ -37,4 +38,3 @@ const getBathRoomWord = (bathRooms) =>
     });
     return targetEquipments;
   }*/
-  
