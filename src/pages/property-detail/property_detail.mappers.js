@@ -17,11 +17,11 @@
         squareMeter: `${property.squareMeter}m2`,
         rooms: `${property.rooms} ${getRoomWord(property.rooms)} `,
         bathrooms: `${property.bathrooms} ${getBathRoomWord(property.rooms)} `,
-        location: property.locationUrl,
+        locationUrl: property.locationUrl,
         mainFeatures: property.mainFeatures,
         equipments: getIdEquipments(property.equipmentIds, equipmentsList),
         mainImage: property.images[0],
-        images: Array.isArray(property.images) ? property.images[0] : '',
+        images: Array.isArray(property.images) ? property.images : [],
       };
     };
     
