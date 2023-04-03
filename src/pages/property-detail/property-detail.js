@@ -23,6 +23,17 @@ const params = history.getParams();
 
 
 getPropertyDetail(params.id).then((propertiesId) => {
-  propertiesToVmId = mapPropertyDetailsFromApiToVm(propertiesId);
-  setPropertyValues(propertiesToVmId);
+  getEquipments().then((equipmentsList) => {   
+    propertiesToVmId = mapPropertyDetailsFromApiToVm(propertiesId,equipmentsList);
+    console.log(propertiesToVmId);
+    setPropertyValues(propertiesToVmId);
+  });
 });
+
+/*
+Promise.all([getEquipments(), getPropertyDetail()]).then(
+  ([equipmentsList, propertiesId]) => {   
+      propertiesToVmId = mapPropertyDetailsFromApiToVm(propertiesId,equipmentsList);
+      setPropertyValues(propertiesToVmId);
+    });
+  */
