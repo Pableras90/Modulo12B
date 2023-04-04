@@ -41,11 +41,11 @@ Promise.all([getEquipments(), getPropertyDetail(params.id)]).then(
     setPropertyValues(propertiesToVmId);
   }
 );
-//id:email id:message-error
+
 
 let form = {
   email: '',
-  comment: '',
+  message: '',
 };
 
 onUpdateField('email', (event) => {
@@ -63,14 +63,14 @@ onUpdateField('message', (event) => {
   const value = event.target.value;
   form = {
     ...form,
-    comment: value,
+    message: value,
   };
-  formValidation.validateField('message', form.comment).then((result) => {
+  formValidation.validateField('message', form.message).then((result) => {
     onSetError('message', result);
   });
 });
 
-//No funciona
+
 
 
 
@@ -78,7 +78,7 @@ onSubmitForm('contact-button', () => {
   formValidation.validateForm(form).then((result) => {
     onSetFormErrors(result);
     if(result.succeeded){
-      postContactForm(form).then(isForm=>{ //ISform???? arreglar 2:16:31 clase1 12A
+      postContactForm(form).then(isForm=>{ 
         console.log({isForm});
       })
     }
