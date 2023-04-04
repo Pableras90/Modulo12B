@@ -78,7 +78,7 @@ onSubmitForm('contact-button', () => {
   formValidation.validateForm(form).then((result) => {
     onSetFormErrors(result);
     if(result.succeeded){
-      postContactForm(form).then(isForm=>{ //ISform???? arreglar
+      postContactForm(form).then(isForm=>{ //ISform???? arreglar 2:16:31 clase1 12A
         console.log({isForm});
       })
     }
