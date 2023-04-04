@@ -19,7 +19,7 @@ let newProperty = {
   images: '',
 };
 
-Promise.all
+//Promise.all
 
 
 
