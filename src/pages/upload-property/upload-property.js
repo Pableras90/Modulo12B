@@ -1,4 +1,15 @@
 import { onUpdateField, onSubmitForm } from '../../common/helpers';
+import { uploadValidation } from './upload-property.validations';
+import { onSetError } from '../../common/helpers';
+/*
+Recuperar los valores del formulario de Datos generales.***
+Crear validaciones necesarias de dicho formulario.***
+Recuperar los valores del formulario de Datos de la vivienda.***
+Crear validaciones necesarias de dicho formulario.
+Recuperar los valores del formulario de Subir fotos.***
+Crear mapper para cumplir con el modelo de la api.
+Crear método post para enviar información del formulario.
+*/
 
 let newProperty = {
   title: '',
@@ -19,23 +30,26 @@ let newProperty = {
   images: '',
 };
 
-//Promise.all
-
-
-
 onUpdateField('title', (event) => {
   const value = event.target.value;
   newProperty = {
     ...newProperty,
     title: value,
   };
+  uploadValidation.validateField('title', newProperty.title).then((result) => {
+    onSetError('title', result);
+  });
 });
+
 onUpdateField('notes', (event) => {
   const value = event.target.value;
   newProperty = {
     ...newProperty,
     notes: value,
   };
+uploadValidation.validateField('notes', newProperty.notes).then((result) => {
+    onSetError('notes', result);
+  });
 });
 onUpdateField('email', (event) => {
   const value = event.target.value;
@@ -43,7 +57,7 @@ onUpdateField('email', (event) => {
     ...newProperty,
     email: value,
   };
-  formValidation.validateField('email', newProperty.email).then((result) => {
+  uploadValidation.validateField('email', newProperty.email).then((result) => {
     onSetError('email', result);
   });
 });
@@ -53,6 +67,9 @@ onUpdateField('phone', (event) => {
     ...newProperty,
     phone: value,
   };
+  uploadValidation.validateField('phone', newProperty.phone).then((result) => {
+    onSetError('phone', result);
+  });
 });
 onUpdateField('price', (event) => {
   const value = event.target.value;
@@ -60,6 +77,9 @@ onUpdateField('price', (event) => {
     ...newProperty,
     price: value,
   };
+uploadValidation.validateField('price',newProperty.price).then((result)=>{
+  onSetError('price',result);
+});
 });
 onUpdateField('saleTypes', (event) => {
   //ARRAY
