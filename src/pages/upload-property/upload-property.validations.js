@@ -1,5 +1,6 @@
 import { Validators, createFormValidation } from '@lemoncode/fonk';
 import { isNumber } from '@lemoncode/fonk-is-number-validator';
+import { isUrl } from '@lemoncode/fonk-is-url-validator';
 const uploadSchema = {
   field: {
     title: [Validators.required],
@@ -12,17 +13,17 @@ const uploadSchema = {
       },
     ], 
     price: [isNumber.validator],
-    saleTypes: [Validators.required],//Voy por aqui!!
+    saleTypes: [Validators.required],//Array
     address: [Validators.required],
     city: [Validators.required],
-    province: [Validators.required],
-    squareMeter: [Validators.required],
-    rooms: [Validators.required],
-    bathrooms: [Validators.required],
-    locationUrl: [Validators.required],
-    mainFeatures: [Validators.required],
-    equipments: [Validators.required],
-    images: [Validators.required],
+    province: [Validators.required],//Selector
+    squareMeter: [isNumber.validator],
+    rooms: [isNumber.validator],
+    bathrooms: [isNumber.validator],
+    locationUrl: [isUrl.validator],
+    mainFeatures: [Validators.required],//Ni idea
+    equipments: [Validators.required],//Ni idea
+    images: [Validators.required],//Imagen
   },
 };
 
