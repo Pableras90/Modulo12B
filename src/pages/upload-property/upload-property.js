@@ -1,8 +1,8 @@
 import { onUpdateField, onSubmitForm } from '../../common/helpers';
 import { uploadValidation } from './upload-property.validations';
 import { onSetError } from '../../common/helpers';
-import { getSaleTypes, getProvinceType } from './upload-property.api';
-import { formatCheckboxId, setCheckboxList, setOptionList } from './upload-property.helpers'
+import { getSaleTypes, getProvinceType,addNewProperty } from './upload-property.api';
+import { formatCheckboxId, setCheckboxList, setOptionList, } from './upload-property.helpers'
 
 /*
 Recuperar los valores del formulario de Datos generales.***
@@ -11,7 +11,7 @@ Recuperar los valores del formulario de Datos de la vivienda.***
 Crear validaciones necesarias de dicho formulario.
 Recuperar los valores del formulario de Subir fotos.***
 Crear mapper para cumplir con el modelo de la api.
-Crear método post para enviar información del formulario.
+Crear método post para enviar información del formulario.***
 */
 
 let newProperty = {
@@ -35,14 +35,9 @@ let newProperty = {
 
 
 
-Promise.all([getProvinceType(), getSaleTypes()]).then(([saleTypesList, provinceList]) => {
-  setCheckboxList(saleTypesList, 'saleTypes');
-  setEvents(saleTypesList)
-  setOptionList(provinceList, 'province');}
-);
 
 const addProperty = value =>{newProperty = { ...newProperty, saleTypes: [...newProperty.saleTypes, value] }} ;
-const setEvents = () => {
+const setEvents = list => {
   list.forEach(element => {
     const id = formatCheckboxId(element);
     onUpdateField(id, event => {
@@ -50,9 +45,17 @@ const setEvents = () => {
       addProperty(value);
     });
   });
+ uploadValidation.validateField('saleTypes', newProperty.saleTypes).then((result) => {
+    onSetError('saleTypes', result);
+  }); 
 };
 
 
+Promise.all([getProvinceType(), getSaleTypes()]).then(([saleTypesList, provinceList]) => {
+  setCheckboxList(saleTypesList, 'saleTypes');
+  setEvents(saleTypesList)
+  setOptionList(provinceList, 'province');}
+);
 
 
 onUpdateField('newFeature', (event) => {
@@ -61,7 +64,7 @@ onUpdateField('newFeature', (event) => {
     ...newProperty,
     mainFeatures: value,
   };
-  uploadValidation.validateField('newFeature', newProperty.title).then((result) => {
+  uploadValidation.validateField('newFeature', newProperty.mainFeatures).then((result) => {
     onSetError('newFeature', result);
   });
 });
@@ -160,6 +163,9 @@ onUpdateField('province', (event) => {
     ...newProperty,
     province: value,
   };
+  uploadValidation.validateField('province', newProperty.province).then((result) => {
+    onSetError('province', result);
+  });
 });
 onUpdateField('squareMeter', (event) => {
   const value = event.target.value;
@@ -201,13 +207,7 @@ onUpdateField('locationUrl', (event) => {
     onSetError('locationUrl', result);
   });
 });
-/*onUpdateField('mainFeatures', (event) => {
-  const value = event.target.value;
-  newProperty = {
-    ...newProperty,
-    mainFeatures: value,
-  };
-});*/
+
 
 onUpdateField('equipments', (event) => {
   const value = event.target.value;
@@ -215,6 +215,9 @@ onUpdateField('equipments', (event) => {
     ...newProperty,
     equipments: value,
   };
+uploadValidation.validateField('equipments', newProperty.equipments).then((result) => {
+    onSetError('equipments', result);
+  });
 });
 onUpdateField('images', (event) => {
   const value = event.target.value;
