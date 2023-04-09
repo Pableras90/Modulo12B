@@ -1,8 +1,18 @@
 import { onUpdateField, onSubmitForm } from '../../common/helpers';
 import { uploadValidation } from './upload-property.validations';
-import { onSetError } from '../../common/helpers';
-import { getSaleTypes, getProvinceType,addNewProperty } from './upload-property.api';
-import { formatCheckboxId, setCheckboxList, setOptionList, } from './upload-property.helpers'
+import { onSetError, onSetFormErrors } from '../../common/helpers';
+import {
+  getSaleTypes,
+  getProvinceType,
+  addNewProperty,
+} from './upload-property.api';
+import {
+  formatCheckboxId,
+  setCheckboxList,
+  setOptionList,
+  formatDeleteFeatureButtonId,
+} from './upload-property.helpers';
+import { mapNewPropertyFromVmToApi } from './upload-property.mappers';
 
 /*
 Recuperar los valores del formulario de Datos generales.***
@@ -10,8 +20,8 @@ Crear validaciones necesarias de dicho formulario.***
 Recuperar los valores del formulario de Datos de la vivienda.***
 Crear validaciones necesarias de dicho formulario.
 Recuperar los valores del formulario de Subir fotos.***
-Crear mapper para cumplir con el modelo de la api.
-Crear método post para enviar información del formulario.***
+Crear mapper para cumplir con el modelo de la api. 
+Crear método post para enviar información del formulario.*** en properties?
 */
 
 let newProperty = {
@@ -33,30 +43,35 @@ let newProperty = {
   images: '',
 };
 
-
-
-
-const addProperty = value =>{newProperty = { ...newProperty, saleTypes: [...newProperty.saleTypes, value] }} ;
-const setEvents = list => {
-  list.forEach(element => {
+const addProperty = (value) => {
+  newProperty = {
+    ...newProperty,
+    saleTypes: [...newProperty.saleTypes, value],
+  };
+};
+//REVISAR
+const setEvents = (list) => {
+  list.forEach((element) => {
     const id = formatCheckboxId(element);
-    onUpdateField(id, event => {
+    onUpdateField(id, (event) => {
       const value = event.target.value;
       addProperty(value);
     });
   });
- uploadValidation.validateField('saleTypes', newProperty.saleTypes).then((result) => {
-    onSetError('saleTypes', result);
-  }); 
+  uploadValidation
+    .validateField('saleTypes', newProperty.saleTypes)
+    .then((result) => {
+      onSetError('saleTypes', result);
+    });
 };
 
-
-Promise.all([getProvinceType(), getSaleTypes()]).then(([saleTypesList, provinceList]) => {
-  setCheckboxList(saleTypesList, 'saleTypes');
-  setEvents(saleTypesList)
-  setOptionList(provinceList, 'province');}
+Promise.all([getProvinceType(), getSaleTypes()]).then(
+  ([ provinceList,saleTypesList]) => {
+    setCheckboxList(saleTypesList, 'saleTypes');//
+    setEvents(saleTypesList);
+    setOptionList(provinceList, 'province'); 
+  }
 );
-
 
 onUpdateField('newFeature', (event) => {
   const value = event.target.value;
@@ -64,9 +79,11 @@ onUpdateField('newFeature', (event) => {
     ...newProperty,
     mainFeatures: value,
   };
-  uploadValidation.validateField('newFeature', newProperty.mainFeatures).then((result) => {
-    onSetError('newFeature', result);
-  });
+  uploadValidation
+    .validateField('newFeature', newProperty.mainFeatures)
+    .then((result) => {
+      onSetError('newFeature', result);
+    });
 });
 
 //DATOS GENERALES--------------------------------------------------------------
@@ -123,18 +140,7 @@ onUpdateField('price', (event) => {
   });
 });
 
-/*onUpdateField('saleTypes', (event) => {
-  //ARRAY
-  const value = event.target.value;
-  newProperty = {
-    ...newProperty,
-    saleTypes: value,
-  };
-});*/
-
-
 //DATOS DE VIVIENDA----------------------------------------------------------------
-
 
 onUpdateField('address', (event) => {
   const value = event.target.value;
@@ -142,9 +148,11 @@ onUpdateField('address', (event) => {
     ...newProperty,
     address: value,
   };
-  uploadValidation.validateField('address', newProperty.address).then((result) => {
-    onSetError('address', result);
-  });
+  uploadValidation
+    .validateField('address', newProperty.address)
+    .then((result) => {
+      onSetError('address', result);
+    });
 });
 onUpdateField('city', (event) => {
   const value = event.target.value;
@@ -163,9 +171,11 @@ onUpdateField('province', (event) => {
     ...newProperty,
     province: value,
   };
-  uploadValidation.validateField('province', newProperty.province).then((result) => {
-    onSetError('province', result);
-  });
+  uploadValidation
+    .validateField('province', newProperty.province)
+    .then((result) => {
+      onSetError('province', result);
+    });
 });
 onUpdateField('squareMeter', (event) => {
   const value = event.target.value;
@@ -173,9 +183,11 @@ onUpdateField('squareMeter', (event) => {
     ...newProperty,
     squareMeter: value,
   };
-  uploadValidation.validateField('squareMeter', newProperty.squareMeter).then((result) => {
-    onSetError('squareMeter', result);
-  });
+  uploadValidation
+    .validateField('squareMeter', newProperty.squareMeter)
+    .then((result) => {
+      onSetError('squareMeter', result);
+    });
 });
 onUpdateField('rooms', (event) => {
   const value = event.target.value;
@@ -193,9 +205,11 @@ onUpdateField('bathrooms', (event) => {
     ...newProperty,
     bathrooms: value,
   };
-  uploadValidation.validateField('bathrooms', newProperty.bathrooms).then((result) => {
-    onSetError('bathrooms', result);
-  });
+  uploadValidation
+    .validateField('bathrooms', newProperty.bathrooms)
+    .then((result) => {
+      onSetError('bathrooms', result);
+    });
 });
 onUpdateField('locationUrl', (event) => {
   const value = event.target.value;
@@ -203,21 +217,37 @@ onUpdateField('locationUrl', (event) => {
     ...newProperty,
     locationUrl: value,
   };
-  uploadValidation.validateField('locationUrl', newProperty.locationUrl).then((result) => {
-    onSetError('locationUrl', result);
-  });
+  uploadValidation
+    .validateField('locationUrl', newProperty.locationUrl)
+    .then((result) => {
+      onSetError('locationUrl', result);
+    });
 });
 
+//Boton insertar----------------------------
 
+onSubmitForm('insert-feature-button', () => {
+  const value = document.getElementById('newFeature').value;
+  if (value) {
+    newProperty = {
+      ...newProperty,
+      mainFeatures: [...newProperty.mainFeatures, value],
+    };
+    formatDeleteFeatureButtonId(value);
+  }
+});
+///////////////////////////////////////////////////////
 onUpdateField('equipments', (event) => {
   const value = event.target.value;
   newProperty = {
     ...newProperty,
     equipments: value,
   };
-uploadValidation.validateField('equipments', newProperty.equipments).then((result) => {
-    onSetError('equipments', result);
-  });
+  uploadValidation
+    .validateField('equipments', newProperty.equipments)
+    .then((result) => {
+      onSetError('equipments', result);
+    });
 });
 onUpdateField('images', (event) => {
   const value = event.target.value;
@@ -225,13 +255,19 @@ onUpdateField('images', (event) => {
     ...newProperty,
     images: value,
   };
-  uploadValidation.validateField('images', newProperty.images).then((result) => {
-    onSetError('images', result);
-  });
+  uploadValidation
+    .validateField('images', newProperty.images)
+    .then((result) => {
+      onSetError('images', result);
+    });
 });
-
 
 //Boton guardar---------------------------------------------
 onSubmitForm('save-button', () => {
   console.log(newProperty);
+  uploadValidation.validateForm(newProperty).then((result) => {
+    onSetFormErrors(result);
+  });
+  const apiNewProperty = mapNewPropertyFromVmToApi(newProperty);
+  //Insertar propiedad ??
 });

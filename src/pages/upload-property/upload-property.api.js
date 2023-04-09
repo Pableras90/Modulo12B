@@ -1,7 +1,7 @@
 import Axios from "axios";
 
 const saleTypesUrl = `${process.env.BASE_API_URL}/saleTypes`;
-const provinceTypesUrl = `${process.env.BASE_API_URL}/saleTypes`;
+const provinceTypesUrl = `${process.env.BASE_API_URL}/provinces`;
 const newPropertyUrl = `${process.env.BASE_API_URL}/properties`;
 
 export const getSaleTypes = () =>
