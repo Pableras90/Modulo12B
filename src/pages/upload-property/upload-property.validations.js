@@ -14,16 +14,16 @@ const uploadSchema = {
       },
     ], 
     price: [Validators.required,isNumber.validator],
-    saleTypes: [Validators.required,arrayRequired.validator],//R
+    saleTypes: [arrayRequired.validator],//R
     address: [Validators.required],
     city: [Validators.required],
-    province: [Validators.required,arrayRequired.validator],//R
+    province: [arrayRequired.validator],//R
     squareMeter: [Validators.required,isNumber.validator],
     rooms: [Validators.required,isNumber.validator],
     bathrooms: [Validators.required,isNumber.validator],
     locationUrl: [Validators.required,isUrl.validator],
     mainFeatures: [Validators.required,arrayRequired.validator],//R
-    equipments: [Validators.required,arrayRequired.validator],//R
+    equipments: [arrayRequired.validator],//R
     images: [Validators.required,arrayRequired.validator],//R
   },
 };
