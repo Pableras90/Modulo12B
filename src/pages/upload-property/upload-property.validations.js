@@ -17,7 +17,7 @@ const uploadSchema = {
     saleTypes: [arrayRequired.validator],//R
     address: [Validators.required],
     city: [Validators.required],
-    province: [arrayRequired.validator],//R
+    province: [Validators.required],//R
     squareMeter: [Validators.required,isNumber.validator],
     rooms: [Validators.required,isNumber.validator],
     bathrooms: [Validators.required,isNumber.validator],

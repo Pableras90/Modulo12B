@@ -1,16 +1,22 @@
 import { onUpdateField, onSubmitForm } from '../../common/helpers';
 import { uploadValidation } from './upload-property.validations';
-import { onSetError, onSetFormErrors } from '../../common/helpers';
+import { onSetError, onSetFormErrors,onAddFile } from '../../common/helpers';
 import {
   getSaleTypes,
   getProvinceType,
   addNewProperty,
+  getEquipmentList,
 } from './upload-property.api';
 import {
   formatCheckboxId,
   setCheckboxList,
   setOptionList,
   formatDeleteFeatureButtonId,
+  onAddImage,
+  onAddFeature,
+  onRemoveFeature,
+  addElement,
+  removeElement,
 } from './upload-property.helpers';
 import { mapNewPropertyFromVmToApi } from './upload-property.mappers';
 
@@ -49,27 +55,32 @@ const addProperty = (value) => {
     saleTypes: [...newProperty.saleTypes, value],
   };
 };
+
+//const removeProperty(value); Hacer funcion
+
 //REVISAR
 const setEvents = (list) => {
   list.forEach((element) => {
     const id = formatCheckboxId(element);
     onUpdateField(id, (event) => {
       const value = event.target.value;
-      addProperty(value);
+      event.target.checked ? addProperty(value) : removeProperty(value);
+      uploadValidation
+        .validateField('saleTypes', newProperty.saleTypes)
+        .then((result) => {
+          onSetError('saleTypes', result);
+        });
     });
   });
-  uploadValidation
-    .validateField('saleTypes', newProperty.saleTypes)
-    .then((result) => {
-      onSetError('saleTypes', result);
-    });
 };
 
-Promise.all([getProvinceType(), getSaleTypes()]).then(
-  ([ provinceList,saleTypesList]) => {
-    setCheckboxList(saleTypesList, 'saleTypes');//
-    setEvents(saleTypesList);
-    setOptionList(provinceList, 'province'); 
+Promise.all([getProvinceType(), getSaleTypes(), getEquipmentList()]).then(
+  ([provinceList, saleTypesList,equipmentsList]) => {
+    setCheckboxList(saleTypesList, 'saleTypes');
+    setCheckboxList(equipmentsList, 'equipments');
+    setEvents(saleTypesList,'saleTypes');
+    setEvents(equipmentsList,'equipments')
+    setOptionList(provinceList, 'province');
   }
 );
 
@@ -226,7 +237,7 @@ onUpdateField('locationUrl', (event) => {
 
 //Boton insertar----------------------------
 
-onSubmitForm('insert-feature-button', () => {
+/*onSubmitForm('insert-feature-button', () => {
   const value = document.getElementById('newFeature').value;
   if (value) {
     newProperty = {
@@ -235,7 +246,7 @@ onSubmitForm('insert-feature-button', () => {
     };
     formatDeleteFeatureButtonId(value);
   }
-});
+});*/
 ///////////////////////////////////////////////////////
 onUpdateField('equipments', (event) => {
   const value = event.target.value;
@@ -267,7 +278,31 @@ onSubmitForm('save-button', () => {
   console.log(newProperty);
   uploadValidation.validateForm(newProperty).then((result) => {
     onSetFormErrors(result);
+    const apiNewProperty = mapNewPropertyFromVmToApi(newProperty);
+    if(result.succeeded){
+      addNewProperty(apiNewProperty).then(()=>{history.back()});
+    }
+
   });
-  const apiNewProperty = mapNewPropertyFromVmToApi(newProperty);
-  //Insertar propiedad ??
+  
+});
+
+//Boton insertar (REVISAR)
+onSubmitForm('insert-feature-button', () => {
+  const value = document.getElementById('newFeature').value;
+  if (value) {
+    const deleteId = formatDeleteFeatureButtonId(value);
+    newProperty = addElement(value, newProperty, 'mainFeatures');
+    onAddFeature(value);
+    onSubmitForm(deleteId, () => {
+      onRemoveFeature(value);
+      newProperty = removeElement(value, newProperty, 'mainFeatures');
+    });
+  }
+});
+//REVISAR
+onAddFile('add-image', (event) => {
+  const value = event.target.value;
+  onAddImage(value);
+  addElement(value, 'add-image');
 });

@@ -93,3 +93,12 @@ export const onAddImage = image => {
   imageContainerElement.appendChild(imageElement);
   imagesElement.insertBefore(imageContainerElement, addImageButton);
 };
+/////////////////////////////////////////
+
+export const addElement=(value,object,id)=>{
+  return{...object,[id]:[...object[id],value]}
+};
+
+export const removeElement =(value,object,id)=>{
+  return {...object,[id]:object[id].filter(element=>element!== value)};
+}

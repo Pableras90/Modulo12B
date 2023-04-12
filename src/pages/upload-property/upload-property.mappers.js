@@ -1,3 +1,9 @@
+const getIdEquipments = (equipmentIds, equipmentList) => {
+  console.log(equipmentIds);
+  return equipmentIds.map((equipmentId) => equipmentList.find((equipment) => equipment.id === equipmentId)?.name
+  );
+};
+
 export const mapNewPropertyFromVmToApi = (property, equipmentsList) => {
   return {
     id: property.id,
