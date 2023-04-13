@@ -49,17 +49,25 @@ let newProperty = {
   images: '',
 };
 
-const addProperty = (value) => {
-  newProperty = {
-    ...newProperty,
-    saleTypes: [...newProperty.saleTypes, value],
-  };
-};
 
-//const removeProperty(value); Hacer funcion
 
 //REVISAR
-const setEvents = (list) => {
+
+ const setEvents = (list, ID) => {
+  list.forEach((element) => {
+    const id = formatCheckboxId(element);
+    onUpdateField(ID, (event) => {
+      const value = event.target.value;
+      if (event.target.checked === true) {
+        newProperty=addElement(value,newProperty, ID);
+      } else {
+        newProperty=removeElement(value,newProperty, ID);
+      }
+    });
+  });
+};
+
+/*const setEvents = (list) => {
   list.forEach((element) => {
     const id = formatCheckboxId(element);
     onUpdateField(id, (event) => {
@@ -72,7 +80,7 @@ const setEvents = (list) => {
         });
     });
   });
-};
+};*/
 
 Promise.all([getProvinceType(), getSaleTypes(), getEquipmentList()]).then(
   ([provinceList, saleTypesList,equipmentsList]) => {
