@@ -67,20 +67,6 @@ let newProperty = {
   });
 };
 
-/*const setEvents = (list) => {
-  list.forEach((element) => {
-    const id = formatCheckboxId(element);
-    onUpdateField(id, (event) => {
-      const value = event.target.value;
-      event.target.checked ? addProperty(value) : removeProperty(value);
-      uploadValidation
-        .validateField('saleTypes', newProperty.saleTypes)
-        .then((result) => {
-          onSetError('saleTypes', result);
-        });
-    });
-  });
-};*/
 
 Promise.all([getProvinceType(), getSaleTypes(), getEquipmentList()]).then(
   ([provinceList, saleTypesList,equipmentsList]) => {
@@ -283,16 +269,16 @@ onUpdateField('images', (event) => {
 
 //Boton guardar---------------------------------------------
 onSubmitForm('save-button', () => {
-  console.log(newProperty);
   uploadValidation.validateForm(newProperty).then((result) => {
     onSetFormErrors(result);
     const apiNewProperty = mapNewPropertyFromVmToApi(newProperty);
     if(result.succeeded){
-      addNewProperty(apiNewProperty).then(()=>{history.back()});
+      addNewProperty(apiNewProperty).then(()=>{
+        console.log("apiNewProperty", apiNewProperty)
+        history.back()
+      });
     }
-
   });
-  
 });
 
 //Boton insertar (REVISAR)
@@ -310,7 +296,7 @@ onSubmitForm('insert-feature-button', () => {
 });
 //REVISAR
 onAddFile('add-image', (event) => {
-  const value = event.target.value;
+  const value = event;
   onAddImage(value);
   addElement(value, 'add-image');
 });

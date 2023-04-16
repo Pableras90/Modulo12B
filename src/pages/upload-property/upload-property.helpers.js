@@ -104,4 +104,3 @@ export const addElement = (value, object, id) => {
 export const removeElement = (value, object, id) => {
   return { ...object, [id]: object[id].filter((element) => element !== value) };
 };
-
