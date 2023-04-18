@@ -1,6 +1,6 @@
 import { onUpdateField, onSubmitForm } from '../../common/helpers';
 import { uploadValidation } from './upload-property.validations';
-import { onSetError, onSetFormErrors,onAddFile } from '../../common/helpers';
+import { onSetError, onSetFormErrors, onAddFile } from '../../common/helpers';
 import {
   getSaleTypes,
   getProvinceType,
@@ -20,15 +20,7 @@ import {
 } from './upload-property.helpers';
 import { mapNewPropertyFromVmToApi } from './upload-property.mappers';
 
-/*
-Recuperar los valores del formulario de Datos generales.***
-Crear validaciones necesarias de dicho formulario.***
-Recuperar los valores del formulario de Datos de la vivienda.***
-Crear validaciones necesarias de dicho formulario.
-Recuperar los valores del formulario de Subir fotos.***
-Crear mapper para cumplir con el modelo de la api. 
-Crear método post para enviar información del formulario.*** en properties?
-*/
+
 
 let newProperty = {
   title: '',
@@ -49,31 +41,28 @@ let newProperty = {
   images: '',
 };
 
-
-
 //REVISAR
 
- const setEvents = (list, ID) => {
+const setEvents = (list, ID) => {
   list.forEach((element) => {
     const id = formatCheckboxId(element);
     onUpdateField(ID, (event) => {
       const value = event.target.value;
       if (event.target.checked === true) {
-        newProperty=addElement(value,newProperty, ID);
+        newProperty = addElement(value, newProperty, ID);
       } else {
-        newProperty=removeElement(value,newProperty, ID);
+        newProperty = removeElement(value, newProperty, ID);
       }
     });
   });
 };
 
-
 Promise.all([getProvinceType(), getSaleTypes(), getEquipmentList()]).then(
-  ([provinceList, saleTypesList,equipmentsList]) => {
+  ([provinceList, saleTypesList, equipmentsList]) => {
     setCheckboxList(saleTypesList, 'saleTypes');
     setCheckboxList(equipmentsList, 'equipments');
-    setEvents(saleTypesList,'saleTypes');
-    setEvents(equipmentsList,'equipments')
+    setEvents(saleTypesList, 'saleTypes');
+    setEvents(equipmentsList, 'equipments');
     setOptionList(provinceList, 'province');
   }
 );
@@ -229,18 +218,9 @@ onUpdateField('locationUrl', (event) => {
     });
 });
 
-//Boton insertar----------------------------
 
-/*onSubmitForm('insert-feature-button', () => {
-  const value = document.getElementById('newFeature').value;
-  if (value) {
-    newProperty = {
-      ...newProperty,
-      mainFeatures: [...newProperty.mainFeatures, value],
-    };
-    formatDeleteFeatureButtonId(value);
-  }
-});*/
+
+
 ///////////////////////////////////////////////////////
 onUpdateField('equipments', (event) => {
   const value = event.target.value;
@@ -272,10 +252,10 @@ onSubmitForm('save-button', () => {
   uploadValidation.validateForm(newProperty).then((result) => {
     onSetFormErrors(result);
     const apiNewProperty = mapNewPropertyFromVmToApi(newProperty);
-    if(result.succeeded){
-      addNewProperty(apiNewProperty).then(()=>{
-        console.log("apiNewProperty", apiNewProperty)
-        history.back()
+    if (result.succeeded) {
+      addNewProperty(apiNewProperty).then(() => {
+        console.log('apiNewProperty', apiNewProperty);
+        history.back();
       });
     }
   });
@@ -295,8 +275,11 @@ onSubmitForm('insert-feature-button', () => {
   }
 });
 //REVISAR
-onAddFile('add-image', (event) => {
-  const value = event;
+onAddFile('add-image', value => {
+  newProperty = {
+    ...newProperty,
+    images: [...newProperty.images, value],
+  };
   onAddImage(value);
-  addElement(value, 'add-image');
+  addElement(value, newProperty, 'images');
 });
