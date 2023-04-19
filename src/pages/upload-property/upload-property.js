@@ -281,5 +281,5 @@ onAddFile('add-image', value => {
     images: [...newProperty.images, value],
   };
   onAddImage(value);
-  addElement(value, newProperty, 'images');
 });
+
