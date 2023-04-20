@@ -15,8 +15,6 @@ import {
   onAddImage,
   onAddFeature,
   onRemoveFeature,
-  addElement,
-  removeElement,
 } from './upload-property.helpers';
 import { mapNewPropertyFromVmToApi } from './upload-property.mappers';
 
@@ -36,19 +34,28 @@ let newProperty = {
   rooms: '',
   bathrooms: '',
   locationUrl: '',
-  mainFeatures: '',
-  equipments: '',
-  images: '',
+  mainFeatures: [],
+  equipmentIds: [],
+  images: [],
 };
 
 //REVISAR
 
+const addElement = (value, object, id) => {
+  return { ...object, [id]: [...object[id], value] };
+};
+
+const removeElement = (value, object, id) => {
+  return { ...object, [id]: object[id].filter((element) => element !== value) };
+};
+
 const setEvents = (list, ID) => {
   list.forEach((element) => {
     const id = formatCheckboxId(element);
-    onUpdateField(ID, (event) => {
+    onUpdateField(id, (event) => {
       const value = event.target.value;
       if (event.target.checked === true) {
+        console.log(addElement(value, newProperty, ID));
         newProperty = addElement(value, newProperty, ID);
       } else {
         newProperty = removeElement(value, newProperty, ID);
@@ -62,7 +69,7 @@ Promise.all([getProvinceType(), getSaleTypes(), getEquipmentList()]).then(
     setCheckboxList(saleTypesList, 'saleTypes');
     setCheckboxList(equipmentsList, 'equipments');
     setEvents(saleTypesList, 'saleTypes');
-    setEvents(equipmentsList, 'equipments');
+    setEvents(equipmentsList, 'equipmentIds');
     setOptionList(provinceList, 'province');
   }
 );
@@ -222,33 +229,23 @@ onUpdateField('locationUrl', (event) => {
 
 
 ///////////////////////////////////////////////////////
-onUpdateField('equipments', (event) => {
+/*onUpdateField('equipments', (event) => {
   const value = event.target.value;
   newProperty = {
     ...newProperty,
-    equipments: value,
+    equipmentIds: [...newProperty.equipmentIds,value],
   };
   uploadValidation
-    .validateField('equipments', newProperty.equipments)
+    .validateField('equipments', newProperty.equipmentIds)
     .then((result) => {
       onSetError('equipments', result);
     });
-});
-onUpdateField('images', (event) => {
-  const value = event.target.value;
-  newProperty = {
-    ...newProperty,
-    images: value,
-  };
-  uploadValidation
-    .validateField('images', newProperty.images)
-    .then((result) => {
-      onSetError('images', result);
-    });
-});
+});*/
+
 
 //Boton guardar---------------------------------------------
 onSubmitForm('save-button', () => {
+  console.log(newProperty)
   uploadValidation.validateForm(newProperty).then((result) => {
     onSetFormErrors(result);
     const apiNewProperty = mapNewPropertyFromVmToApi(newProperty);
@@ -281,5 +278,5 @@ onAddFile('add-image', value => {
     images: [...newProperty.images, value],
   };
   onAddImage(value);
-  addElement(value, newProperty, 'images');
 });
+

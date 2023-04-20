@@ -1,27 +1,21 @@
-const getIdEquipments = (equipmentIds, equipmentList) => {
-  console.log(equipmentIds);
-  return equipmentIds.map((equipmentId) => equipmentList.find((equipment) => equipment.id === equipmentId)?.name
-  );
-};
-
-export const mapNewPropertyFromVmToApi = (property, equipmentsList) => {
+export const mapNewPropertyFromVmToApi = (property) => {
   return {
     id: property.id,
     title: property.title,
-    notes: `${property.notes}`,
-    price: `${property.price.toLocaleString()} €`,
+    notes: property.notes,
+    email: property.email,
+    phone: property.phone,
+    price: property.price,
+    salesTypesIds: property.salesTypesIds,
+    address: property.address,
     city: property.city,
-    squareMeter: `${property.squareMeter}m2`,
-    rooms: `${property.rooms} ${getRoomWord(property.rooms)} `,
-    bathrooms: `${property.bathrooms} ${getBathRoomWord(property.rooms)} `,
+    provinceId: property.provinceId,
+    squareMeter: property.squareMeter,
+    rooms: property.rooms,
+    bathrooms: property.bathrooms,
     locationUrl: property.locationUrl,
     mainFeatures: property.mainFeatures,
-    equipments: getIdEquipments(property.equipmentIds, equipmentsList),
-    mainImage: property.images[0],
-    images: Array.isArray(property.images) ? property.images : [],
+    equipmentIds: property.equipmentIds,
+    images: property.images,
   };
 };
-
-const getRoomWord = (rooms) => (rooms > 1 ? 'habitaciones' : 'habitación');
-const getBathRoomWord = (bathRooms) =>
-  bathRooms > 1 ? 'cuartos de baño' : 'cuarto de baño';
