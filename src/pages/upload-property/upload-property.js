@@ -245,7 +245,6 @@ onUpdateField('locationUrl', (event) => {
 
 //Boton guardar---------------------------------------------
 onSubmitForm('save-button', () => {
-  console.log(newProperty)
   uploadValidation.validateForm(newProperty).then((result) => {
     onSetFormErrors(result);
     const apiNewProperty = mapNewPropertyFromVmToApi(newProperty);
