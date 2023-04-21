@@ -74,19 +74,7 @@ Promise.all([getProvinceType(), getSaleTypes(), getEquipmentList()]).then(
   }
 );
 
-/*onUpdateField('newFeature', (event) => {
-  const value = event.target.value;
-  newProperty = {
-    ...newProperty,
-    mainFeatures: value,
-  };
-  uploadValidation
-    .validateField('newFeature', newProperty.mainFeatures)
-    .then((result) => {
-      onSetError('newFeature', result);
-    });
-});
-*/
+
 //DATOS GENERALES--------------------------------------------------------------
 
 onUpdateField('title', (event) => {
@@ -229,19 +217,6 @@ onUpdateField('locationUrl', (event) => {
 
 
 ///////////////////////////////////////////////////////
-/*onUpdateField('equipments', (event) => {
-  const value = event.target.value;
-  newProperty = {
-    ...newProperty,
-    equipmentIds: [...newProperty.equipmentIds,value],
-  };
-  uploadValidation
-    .validateField('equipments', newProperty.equipmentIds)
-    .then((result) => {
-      onSetError('equipments', result);
-    });
-});*/
-
 
 //Boton guardar---------------------------------------------
 onSubmitForm('save-button', () => {
