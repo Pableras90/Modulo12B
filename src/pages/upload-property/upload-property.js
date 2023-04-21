@@ -74,7 +74,7 @@ Promise.all([getProvinceType(), getSaleTypes(), getEquipmentList()]).then(
   }
 );
 
-onUpdateField('newFeature', (event) => {
+/*onUpdateField('newFeature', (event) => {
   const value = event.target.value;
   newProperty = {
     ...newProperty,
@@ -86,7 +86,7 @@ onUpdateField('newFeature', (event) => {
       onSetError('newFeature', result);
     });
 });
-
+*/
 //DATOS GENERALES--------------------------------------------------------------
 
 onUpdateField('title', (event) => {
@@ -257,7 +257,7 @@ onSubmitForm('save-button', () => {
   });
 });
 
-//Boton insertar (REVISAR)
+
 onSubmitForm('insert-feature-button', () => {
   const value = document.getElementById('newFeature').value;
   if (value) {
@@ -270,7 +270,7 @@ onSubmitForm('insert-feature-button', () => {
     });
   }
 });
-//REVISAR
+
 onAddFile('add-image', value => {
   newProperty = {
     ...newProperty,
